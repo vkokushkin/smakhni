@@ -44,7 +44,7 @@ footer{color:var(--muted);font-size:13px;margin-top:32px}
   <button data-os="android"><b>Android</b><span>Samsung, Xiaomi, Honor и другие</span></button>
   <button data-os="mac"><b>Mac</b><span>macOS 13 и новее</span></button>
   <button data-os="win"><b>Windows</b><span>Windows 10 и 11</span></button>
-  <button data-os="ios"><b>iPhone и iPad</b><span>через Safari, без установки</span></button>
+  <button data-os="ios"><b>iPhone и iPad</b><span>через LocalSend или Safari</span></button>
 </div>
 
 <div id="qr">
@@ -74,12 +74,12 @@ var C={
   'Если появится синее окно защиты: «Подробнее», затем «Выполнить в любом случае».',
   'Значок появится у часов. Нажмите на него, чтобы показать код для телефона.'],
   note:'Нужен Bluetooth или общая сеть Wi-Fi с телефоном. Если сети нет, программа сама предложит подключиться к Wi-Fi телефона.'},
- ios:{t:'Смахни на iPhone и iPad',f:null,steps:[
-  'Ставить ничего не нужно, работает в Safari.',
-  'На телефоне Android со «Смахни» откройте вкладку «iPhone» (на Mac: значок в верхней строке, «С iPhone…»).',
-  'Наведите камеру iPhone на код на экране и откройте ссылку.',
-  'Откроется страница: можно отправить фото и файлы или скачать присланное.'],
-  note:'iPhone и второе устройство должны видеть друг друга: одна сеть Wi-Fi или точка доступа телефона. Отдельное приложение для iPhone готовится.'}
+ ios:{t:'Смахни на iPhone и iPad',f:null,store:'https://apps.apple.com/app/localsend/id1661733229',steps:[
+  'Поставьте бесплатное приложение LocalSend из App Store (кнопка выше).',
+  'На телефоне Android со «Смахни» откройте вкладку «iPhone».',
+  'Откройте LocalSend на iPhone: телефон появится в списке. Отправляйте в обе стороны.',
+  'Нет общей сети Wi-Fi? На Android нажмите «Своя сеть телефона», а на iPhone наведите камеру на код сети.'],
+  note:'Без установки тоже можно: на вкладке «iPhone» есть код для Safari, страница принимает и отдает файлы.'}
 };
 function detect(){var u=navigator.userAgent;
  if(/android/i.test(u))return'android';
@@ -88,6 +88,7 @@ function detect(){var u=navigator.userAgent;
  if(/Windows/.test(u))return'win';return'android'}
 function show(os){var c=C[os],h='<h2>'+c.t+'</h2>';
  if(c.f)h+='<a class="btn" href="'+R+c.f+'" download>Скачать</a> <span class="size">'+c.s+'</span>';
+ if(c.store)h+='<a class="btn" href="'+c.store+'">LocalSend в App Store</a>';
  h+='<ol>'+c.steps.map(function(s){return'<li>'+s+'</li>'}).join('')+'</ol>';
  if(c.note)h+='<div class="note">'+c.note+'</div>';
  document.getElementById('card').innerHTML=h;}
