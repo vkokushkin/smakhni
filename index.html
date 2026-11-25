@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Смахни</title>
+<meta name="description" content="Передача файлов между телефоном и компьютером напрямую, без мессенджеров">
+<style>
+:root{--bg:#f6f7f9;--card:#fff;--text:#14181f;--muted:#5d6675;--line:#e3e6eb;--accent:#E84818;--accent-text:#fff;--soft:#fff3ee}
+@media (prefers-color-scheme:dark){:root{--bg:#0f1216;--card:#181c22;--text:#eef1f5;--muted:#9aa4b2;--line:#2a3039;--soft:#2a1b15}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:16px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
+main{max-width:720px;margin:0 auto;padding:32px 16px 48px}
+h1{font-size:34px;margin:0 0 6px;letter-spacing:-.5px}
+.lead{color:var(--muted);margin:0 0 28px;font-size:18px}
+.main-card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:24px;margin-bottom:24px}
+.main-card h2{margin:0 0 6px;font-size:22px}
+.btn{display:inline-block;background:var(--accent);color:var(--accent-text);text-decoration:none;font-weight:600;font-size:18px;padding:14px 22px;border-radius:12px;margin:12px 0 4px}
+.size{color:var(--muted);font-size:14px}
+ol{padding-left:22px;margin:12px 0 0}
+li{margin:6px 0}
+.note{background:var(--soft);border-radius:12px;padding:12px 14px;margin-top:14px;font-size:15px}
+h3{font-size:16px;margin:28px 0 10px;color:var(--muted);font-weight:600}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.grid a,.grid button{display:block;text-align:left;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px;color:var(--text);text-decoration:none;font:inherit;cursor:pointer}
+.grid b{display:block}
+.grid span{color:var(--muted);font-size:14px}
+#qr{display:flex;gap:18px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px;margin-top:24px}
+#qrbox{background:#fff;padding:8px;border-radius:8px;flex:none}
+#qrbox img,#qrbox canvas{display:block;width:132px;height:132px}
+footer{color:var(--muted);font-size:13px;margin-top:32px}
+@media (max-width:480px){#qr{flex-direction:column;align-items:flex-start}h1{font-size:28px}}
+</style>
+</head>
+<body>
+<main>
+<h1>Смахни</h1>
+<p class="lead">Файлы между телефоном и компьютером напрямую: по Wi-Fi или Bluetooth, без мессенджеров и облака.</p>
+
+<div class="main-card" id="card"></div>
+
+<h3>Другие устройства</h3>
+<div class="grid">
+  <button data-os="android"><b>Android</b><span>Samsung, Xiaomi, Honor и другие</span></button>
+  <button data-os="mac"><b>Mac</b><span>macOS 13 и новее</span></button>
+  <button data-os="win"><b>Windows</b><span>Windows 10 и 11</span></button>
+  <button data-os="ios"><b>iPhone и iPad</b><span>через Safari, без установки</span></button>
+</div>
+
+<div id="qr">
+  <div id="qrbox"></div>
+  <div><b>Открыть на телефоне</b><br><span class="size">Наведите камеру телефона на код, откроется эта страница.</span></div>
+</div>
+
+<footer>Файлы идут только между вашими устройствами. Сервера в середине нет.</footer>
+</main>
+
+<script>
+var R='https://github.com/vkokushkin/smakhni/releases/latest/download/';
+var C={
+ android:{t:'Смахни для Android',f:'Smakhni.apk',s:'7 МБ',steps:[
+  'Нажмите «Скачать» и откройте скачанный файл.',
+  'Телефон спросит разрешение на установку из браузера: разрешите.',
+  'Откройте «Смахни» и выберите вкладку «Рядом», чтобы связаться с другим устройством.'],
+  note:'На Xiaomi и Honor разрешите приложению работу в фоне, иначе система будет его выключать.'},
+ mac:{t:'Смахни для Mac',f:'Smakhni-Mac.zip',s:'1 МБ',steps:[
+  'Нажмите «Скачать», файл распакуется сам.',
+  'Перетащите «Smakhni» в папку «Программы».',
+  'Первый запуск: правая кнопка мыши по значку, «Открыть», затем «Открыть» ещё раз.',
+  'Значок появится в верхней строке. Нажмите на него, чтобы показать код для телефона.'],
+  note:'Если Mac пишет, что не может проверить разработчика: Системные настройки, «Конфиденциальность и безопасность», внизу кнопка «Всё равно открыть».'},
+ win:{t:'Смахни для Windows',f:'Smakhni.exe',s:'58 МБ',steps:[
+  'Нажмите «Скачать» и запустите файл.',
+  'Если появится синее окно защиты: «Подробнее», затем «Выполнить в любом случае».',
+  'Значок появится у часов. Нажмите на него, чтобы показать код для телефона.'],
+  note:'Нужен Bluetooth или общая сеть Wi-Fi с телефоном. Если сети нет, программа сама предложит подключиться к Wi-Fi телефона.'},
+ ios:{t:'Смахни на iPhone и iPad',f:null,steps:[
+  'Ставить ничего не нужно, работает в Safari.',
+  'На телефоне Android со «Смахни» откройте вкладку «iPhone» (на Mac: значок в верхней строке, «С iPhone…»).',
+  'Наведите камеру iPhone на код на экране и откройте ссылку.',
+  'Откроется страница: можно отправить фото и файлы или скачать присланное.'],
+  note:'iPhone и второе устройство должны видеть друг друга: одна сеть Wi-Fi или точка доступа телефона. Отдельное приложение для iPhone готовится.'}
+};
+function detect(){var u=navigator.userAgent;
+ if(/android/i.test(u))return'android';
+ if(/iphone|ipad|ipod/i.test(u)||(/Macintosh/.test(u)&&navigator.maxTouchPoints>1))return'ios';
+ if(/Mac OS X/.test(u))return'mac';
+ if(/Windows/.test(u))return'win';return'android'}
+function show(os){var c=C[os],h='<h2>'+c.t+'</h2>';
+ if(c.f)h+='<a class="btn" href="'+R+c.f+'" download>Скачать</a> <span class="size">'+c.s+'</span>';
+ h+='<ol>'+c.steps.map(function(s){return'<li>'+s+'</li>'}).join('')+'</ol>';
+ if(c.note)h+='<div class="note">'+c.note+'</div>';
+ document.getElementById('card').innerHTML=h;}
+var me=detect();show(me);
+document.querySelectorAll('[data-os]').forEach(function(b){b.onclick=function(){show(b.dataset.os);document.getElementById('card').scrollIntoView({behavior:'smooth'})}});
+if(me==='android'||me==='ios')document.getElementById('qr').style.display='none';
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>try{new QRCode(document.getElementById('qrbox'),{text:location.href.split('#')[0],width:132,height:132,correctLevel:QRCode.CorrectLevel.M})}catch(e){document.getElementById('qr').style.display='none'}</script>
+</body>
+</html>
