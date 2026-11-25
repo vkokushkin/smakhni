@@ -44,7 +44,6 @@ footer{color:var(--muted);font-size:13px;margin-top:32px}
   <button data-os="android"><b>Android</b><span>Samsung, Xiaomi, Honor и другие</span></button>
   <button data-os="mac"><b>Mac</b><span>macOS 13 и новее</span></button>
   <button data-os="win"><b>Windows</b><span>Windows 10 и 11</span></button>
-  <button data-os="ios"><b>iPhone и iPad</b><span>через LocalSend или Safari</span></button>
 </div>
 
 <div id="qr">
@@ -73,28 +72,21 @@ var C={
   'Нажмите «Скачать» и запустите файл.',
   'Если появится синее окно защиты: «Подробнее», затем «Выполнить в любом случае».',
   'Значок появится у часов. Нажмите на него, чтобы показать код для телефона.'],
-  note:'Нужен Bluetooth или общая сеть Wi-Fi с телефоном. Если сети нет, программа сама предложит подключиться к Wi-Fi телефона.'},
- ios:{t:'Смахни на iPhone и iPad',f:null,store:'https://apps.apple.com/app/localsend/id1661733229',steps:[
-  'Поставьте бесплатное приложение LocalSend из App Store (кнопка выше).',
-  'На телефоне Android со «Смахни» откройте вкладку «iPhone».',
-  'Откройте LocalSend на iPhone: телефон появится в списке. Отправляйте в обе стороны.',
-  'Нет общей сети Wi-Fi? На Android нажмите «Своя сеть телефона», а на iPhone наведите камеру на код сети.'],
-  note:'Без установки тоже можно: на вкладке «iPhone» есть код для Safari, страница принимает и отдает файлы.'}
+  note:'Нужен Bluetooth или общая сеть Wi-Fi с телефоном. Если сети нет, программа сама предложит подключиться к Wi-Fi телефона.'}
 };
 function detect(){var u=navigator.userAgent;
  if(/android/i.test(u))return'android';
- if(/iphone|ipad|ipod/i.test(u)||(/Macintosh/.test(u)&&navigator.maxTouchPoints>1))return'ios';
+ if(/iphone|ipad|ipod/i.test(u))return'android';
  if(/Mac OS X/.test(u))return'mac';
  if(/Windows/.test(u))return'win';return'android'}
 function show(os){var c=C[os],h='<h2>'+c.t+'</h2>';
  if(c.f)h+='<a class="btn" href="'+R+c.f+'" download>Скачать</a> <span class="size">'+c.s+'</span>';
- if(c.store)h+='<a class="btn" href="'+c.store+'">LocalSend в App Store</a>';
  h+='<ol>'+c.steps.map(function(s){return'<li>'+s+'</li>'}).join('')+'</ol>';
  if(c.note)h+='<div class="note">'+c.note+'</div>';
  document.getElementById('card').innerHTML=h;}
 var me=detect();show(me);
 document.querySelectorAll('[data-os]').forEach(function(b){b.onclick=function(){show(b.dataset.os);document.getElementById('card').scrollIntoView({behavior:'smooth'})}});
-if(me==='android'||me==='ios')document.getElementById('qr').style.display='none';
+if(me==='android')document.getElementById('qr').style.display='none';
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script>try{new QRCode(document.getElementById('qrbox'),{text:location.href.split('#')[0],width:132,height:132,correctLevel:QRCode.CorrectLevel.M})}catch(e){document.getElementById('qr').style.display='none'}</script>
